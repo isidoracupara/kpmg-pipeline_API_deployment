@@ -7,7 +7,7 @@ from airflow.operators.dummy_operator import DummyOperator
 
 default_args = {
 'owner'                 : 'airflow',
-'description'           : 'Use of the DockerOperator',
+'description'           : 'KPMG use case pipeline',
 'depend_on_past'        : False,
 'start_date'            : datetime(2021, 5, 1),
 'email_on_failure'      : False,
@@ -16,7 +16,7 @@ default_args = {
 'retry_delay'           : timedelta(minutes=5)
 }
 
-with DAG('docker_operator_demo', default_args=default_args, schedule_interval="5 * * * *", catchup=False) as dag:
+with DAG('kpmg_use_case', default_args=default_args, catchup=False) as dag:
     start_dag = DummyOperator(
         task_id='start_dag'
         )
@@ -36,7 +36,7 @@ with DAG('docker_operator_demo', default_args=default_args, schedule_interval="5
         )
     t3 = BashOperator(
         task_id='process_text_data',
-        bash_command='echo "Get the text from database and process it with a model?'
+        bash_command='echo "Get the text from database and process it with a model?"'
         )
 
     start_dag >> t1 
