@@ -2,6 +2,9 @@ from langdetect import detect
 import camelot
 import os
 
+def init_set():
+    file_cache = set()
+
 def ocr_fr_detect_v1(file):
     """ 
     This function takes a pdf file as an input and outputs a txt file with the same name.
@@ -29,18 +32,25 @@ def ocr_fr_detect_v1(file):
                 # if there is at least one vowel (we cannot detect language for numbers)
                 if any(char in vowels for char in text):
                     # detect language
-                    language = detect(text)
-                    if language == 'fr':
-                        fr.append(text)
+                    try:
+                        language = detect(text)
+                        if language == 'fr':
+                            fr.append(text)
+                    except Exception as e:
+                        print(e)
+                        print(os.path.basename(os.path.splitext(file)[0]))
                 else:
                     # print(i,j, ': ',text ) # used for debug
                     if len(text)>1:
                         # add rows that contains no vowels, longer than one digit to the french version
                         fr.append(text)
         # Outputs the french text in a text file
-        text_file = os.path.splitext(file)[0]
-        with open(f"{text_file}_fr.txt", "w") as output:
+        text_file = os.path.basename(os.path.splitext(file)[0] + "_fr.txt")
+        # print(os.path.basename(text_file))
+        filepath = os.path.join("dags/kpmg-pipeline/scraper/fr_text", text_file)
+        print(filepath)
+        with open(filepath, "w") as output:
             for row in fr:
                 output.write(row)
             # little feedback
-            print(f'french extracted into: {file}_fr.txt')
+            print(f'french extracted into: {filepath}')
