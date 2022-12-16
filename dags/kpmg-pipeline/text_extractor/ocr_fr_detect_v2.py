@@ -70,13 +70,13 @@ def ocr_fr_detect_v2(file):
                          
                         else:
         # Outputs the french text in a text file
-        with open(f"{file}_fr.txt", "w") as output:
-            for row in fr:
-                output.write(row)
-                # add a space between words
-                output.write(' ')
-            # little feedback
-            print(f'french extracted into: {file}_fr.txt')
+                            with open(f"{file}_fr.txt", "w") as output:
+                                for row in fr:
+                                    output.write(row)
+                                    # add a space between words
+                                    output.write(' ')
+                                # little feedback
+                                print(f'french extracted into: {file}_fr.txt')
     else:
         print('not a pdf')
         pass
