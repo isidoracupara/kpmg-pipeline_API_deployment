@@ -1,4 +1,4 @@
-from ocr_fr_detect import ocr_fr_detect_v1
+from ocr_fr_detect import ocr_fr_detect_v2
 import os
 
 file_cache = set()
@@ -19,5 +19,5 @@ dict_paths = pdf_path_extract("KPMG_data/")
 for key, val in dict_paths.items():
     pdf_file = os.path.basename(os.path.splitext(val)[0])
     if pdf_file not in file_cache:
-        ocr_fr_detect_v1(val)
+        ocr_fr_detect_v2(val)
         file_cache.add(pdf_file)
