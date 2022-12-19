@@ -1,4 +1,4 @@
-from ocr_fr_detect import ocr_fr_detect_v2
+from ocr_fr_detect_v2 import ocr_fr_detect_v2
 import os
 
 file_cache = set()
@@ -12,7 +12,7 @@ def pdf_path_extract(path: str):
                 pdf_files[file] = os.path.join(root, file)
     return pdf_files
 
-dict_paths = pdf_path_extract("KPMG_data/")
+dict_paths = pdf_path_extract("200/")
 
 # print(dictio)
 

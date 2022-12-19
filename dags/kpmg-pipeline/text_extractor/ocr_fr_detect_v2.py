@@ -1,5 +1,7 @@
 from langdetect import detect
 import camelot
+import os
+from utils.upload_file import upload_file
 
 def ocr_fr_detect_v2(file):
     """ 
@@ -68,15 +70,18 @@ def ocr_fr_detect_v2(file):
                             # add rows that contains unexpected languages or errors, longer than one digit to the french version
                             fr.append(text)
                          
-                        else:
         # Outputs the french text in a text file
-                            with open(f"{file}_fr.txt", "w") as output:
-                                for row in fr:
-                                    output.write(row)
-                                    # add a space between words
-                                    output.write(' ')
-                                # little feedback
-                                print(f'french extracted into: {file}_fr.txt')
+        text_file = os.path.basename(os.path.splitext(file)[0] + "_fr.txt")
+        # print(os.path.basename(text_file))
+        filepath = os.path.join("dags/kpmg-pipeline/text_extractor/fr_text", text_file)
+        with open(filepath, "w") as output:
+            for row in fr:
+                output.write(row)
+                # add a space between words
+                output.write(' ')
+            # little feedback
+            upload_file(filepath, text_file)
+            print(f'french extracted into: {filepath}')
     else:
         print('not a pdf')
         pass
