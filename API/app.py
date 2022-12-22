@@ -1,133 +1,43 @@
-import uvicorn
+
 # from preprocessing.cleaning_data import Property, preprocess
 # from predict.prediction import predict_price
-from fastapi import FastAPI, status, HTTPException
-from pydantic import BaseModel
-from datetime import datetime
-import pandas as pd
+from fastapi import FastAPI, status
 
-import API.azure as azure
+from algolia import get_CLA_by_id, get_CLA_by_name, get_CLAs, initialize_database, get_CLAs_by_keyword
 
 app = FastAPI()
 
-class CLA(BaseModel):
-    id_pdf: str
-    text: str
-    cla_class: str
-    related_pdf: int
-    upload_date: datetime
-    url: str
-    summary: str
+@app.on_event("startup")
+async def startup_event():
+    initialize_database()
+
 
 @app.get("/", status_code=status.HTTP_200_OK)
 async def root():
     return "Alive"
 
-@app.get("/filter/{CLA_class}", status_code=status.HTTP_200_OK, response_model=list[CLA])
-async def filter_get(CLA_class: str):
-    # get CLAs
-    # store in panda table
-    # filter panda table on given class
-    # return filtered CLAs
 
-    df: pd.DataFrame = azure.download_csv_files_to_dataframe()
-
-    if df == None:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="unable to fetch data")
-    
-    # DO STUFF with df
-    CLA_list = []
+@app.get("/cla", status_code=status.HTTP_200_OK, response_model=list[dict])
+async def cla_get():
+    CLA_list = get_CLAs()
 
     return CLA_list
 
-@app.get("/urls", status_code=status.HTTP_200_OK)
-async def urls_get():
-        # get CLAs
-        # store in panda table
-        # get urls ?
-        # return urls
+@app.get("/cla/{id}", status_code=status.HTTP_200_OK)
+async def cla_by_id_get(id: str):
+    CLA = get_CLA_by_id(id)
 
-    df: pd.DataFrame = azure.download_csv_files_to_dataframe()
+    return CLA
 
-    if df == None:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="unable to fetch data")
-    
-    # DO STUFF with df
-    urls = []
+@app.get("/cla", status_code=status.HTTP_200_OK)
+async def cla_by_name_get(name: str):
+    CLA = get_CLA_by_name(name)
 
-    return urls
-
-@app.get("/statistics/{CLA_class}", status_code=status.HTTP_200_OK)
-async def statistics_get(CLA_class: str):
-    # get CLAs
-    # store in panda table
-    # look for or do arithamtics for statistics
-    # which statitistics yet to be decided ?
-
-    df: pd.DataFrame = azure.download_csv_files_to_dataframe()
-
-    if df == None:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="unable to fetch data")
-    
-    # DO STUFF with df
-    statistics = df
-
-    return statistics
-
-@app.get("/summary/{id}", status_code=status.HTTP_200_OK)
-async def summary_get(id: str):
-    
-    df: pd.DataFrame = azure.download_csv_files_to_dataframe()
-
-    if df == None:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="unable to fetch data")
-    
-    # DO STUFF with df
-    summary = df
-
-    return summary
-
-@app.get("/related/{id}", status_code=status.HTTP_200_OK)
-async def related_get(id: str):
-    # get cla for id
-    # get related clas based of cla we got id for 
-
-    df: pd.DataFrame = azure.download_csv_files_to_dataframe()
-
-    if df == None:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="unable to fetch data")
-    
-    # DO STUFF with df
-    related = df
-
-    return related
+    return CLA
 
 
-@app.post("/new-CLA")
-async def run_post(new_CLA_data: CLA):
-    processed_data = process(new_CLA_data)
-    # prediction = predict_price(preprocessed_data)
+@app.get("/search", status_code=status.HTTP_200_OK, response_model=list[dict])
+async def search_get(keyword: str):
+    CLA_list = get_CLAs_by_keyword(keyword)
 
-
-
-    return processed_data
-
-
-
-@app.get("/new-CLA", status_code=status.HTTP_200_OK, response_model=CLA)
-async def CLA_get():
-    # get information from csv store
-
-    
-    # return dats in expected format 
-
-    return ('Expected format:\
-{"data":\
-{"id_pdf": str,\
-"text": str,\
-"cla_class": str,\
-"related_pdf": int,\
-"upload_date": datetime,\
-"url": str,\
-"summary": str,\
-},}')
+    return CLA_list
