@@ -8,7 +8,7 @@ Structure Extraction (ChatGPT)
 
 Endpoints:
 
-GET /cla 
+GET /cla (example: https://kpmg-cla.onrender.com/cla)
 
   - gets all CLA and their data from the database
 
