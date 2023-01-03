@@ -2,9 +2,11 @@
 ## Url: https://kpmg-cla.onrender.com/docs
 
 Features:
-Advanced full text search (Algolia)
-Intelligent document comparison (ChatGPT)
-Structure Extraction (ChatGPT)
+-Advanced full text search (Algolia)
+-Intelligent document comparison (ChatGPT)
+-Structure Extraction (ChatGPT)
+
+Note: Works best with Firefox or Chrome
 
 Endpoints:
 
