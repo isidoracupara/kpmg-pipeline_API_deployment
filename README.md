@@ -1,4 +1,4 @@
-# Customer facing API for the KPMG use case: instracting info from CLA documents
+# Customer facing API for the KPMG use case: extracting info from CLA documents
 ## Url: https://kpmg-cla.onrender.com/docs
 
 Features:
