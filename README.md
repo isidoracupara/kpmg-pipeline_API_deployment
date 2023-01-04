@@ -27,3 +27,7 @@ GET /search/?keyword=example (example: https://kpmg-cla.onrender.com/search/?key
 
 GET /comparison/{id} (example: https://kpmg-cla.onrender.com/comparison/200-2020-000391)
   -returns comparison of CLA and its parent if a parent document exists
+
+
+
+Full project repo: https://github.com/KNobles/kpmg-pipeline
